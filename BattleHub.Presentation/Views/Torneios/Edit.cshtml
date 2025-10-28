@@ -1,0 +1,42 @@
+﻿@model BattleHub.Application.ViewModels.TorneioViewModel
+@{
+    ViewData["Title"] = "Editar Torneio";
+}
+<h2>Editar Torneio</h2>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="Id" />
+    <!-- copie os campos do Create -->
+    <div class="mb-3">
+        <label asp-for="Nome" class="form-label"></label>
+        <input asp-for="Nome" class="form-control" />
+        <span asp-validation-for="Nome" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="TamanhoChave" class="form-label"></label>
+        <select asp-for="TamanhoChave" class="form-select">
+            <option>4</option>
+            <option>8</option>
+            <option>16</option>
+            <option>32</option>
+        </select>
+        <span asp-validation-for="TamanhoChave" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="DataInicio" class="form-label"></label>
+        <input asp-for="DataInicio" type="date" class="form-control" />
+        <span asp-validation-for="DataInicio" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="DataFim" class="form-label"></label>
+        <input asp-for="DataFim" type="date" class="form-control" />
+        <span asp-validation-for="DataFim" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Salvar</button>
+    <a asp-action="Index" class="btn btn-outline-secondary">Voltar</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

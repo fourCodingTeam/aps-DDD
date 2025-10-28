@@ -1,0 +1,11 @@
+﻿@model BattleHub.Application.ViewModels.TorneioViewModel
+@{
+    ViewData["Title"] = "Remover Torneio";
+}
+<h2>Remover Torneio</h2>
+<p>Tem certeza que deseja remover o torneio <strong>@Model.Nome</strong>?</p>
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Remover</button>
+    <a asp-action="Index" class="btn btn-outline-secondary">Cancelar</a>
+</form>
