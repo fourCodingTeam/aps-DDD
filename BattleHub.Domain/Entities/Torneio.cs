@@ -47,8 +47,7 @@ namespace BattleHub.Domain.Entities
             if (Estado != EstadoTorneio.Rascunho)
                 throw new InvalidOperationException("Somente torneio em rascunho pode ser publicado.");
 
-            if (_inscricoes.Count != TamanhoChave.Valor)
-                throw new InvalidOperationException("Para publicar, o número de inscrições deve preencher a chave.");
+            Estado = EstadoTorneio.Publicado;
 
             try
             {
@@ -62,17 +61,12 @@ namespace BattleHub.Domain.Entities
             {
                 throw new InvalidOperationException($"Erro ao criar o torneio. Error: {ex}");
             }
-
-            Estado = EstadoTorneio.Publicado;
         }
 
         public void PublicarComPares(IReadOnlyList<(Guid A, Guid B)> pares)
         {
             if (Estado != EstadoTorneio.Rascunho)
                 throw new InvalidOperationException("Apenas torneios em rascunho podem ser publicados.");
-
-            if (_inscricoes.Count != TamanhoChave.Valor)
-                throw new InvalidOperationException("Número de inscrições não corresponde ao tamanho da chave.");
 
             if (pares.Count != _inscricoes.Count / 2)
                 throw new InvalidOperationException("Número inválido de pares para gerar partidas.");

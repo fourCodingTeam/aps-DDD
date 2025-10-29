@@ -13,25 +13,25 @@ namespace BattleHub.Infrastructure.Repositories
             _ctx = ctx;
         }
 
-        public async Task<Torneio?> ObterPorIdAsync(Guid id, CancellationToken ct = default)
+        public async Task<Torneio?> ObterPorIdAsync(Guid id)
         {
             return await _ctx.Torneios
                 .Include(t => t.Inscricoes)
                 .Include(t => t.Partidas)
-                .FirstOrDefaultAsync(t => t.Id == id, ct);
+                .FirstOrDefaultAsync(t => t.Id == id);
         }
 
-        public async Task AdicionarAsync(Torneio t, CancellationToken ct = default)
+        public async Task AdicionarAsync(Torneio t)
         {
-            await _ctx.Torneios.AddAsync(t, ct);
+            await _ctx.Torneios.AddAsync(t);
         }
 
-        public Task AtualizarAsync(Torneio t, CancellationToken ct = default)
+        public Task AtualizarAsync(Torneio t)
         { 
             _ctx.Torneios.Update(t); return Task.CompletedTask; 
         }
 
-        public Task RemoverAsync(Torneio t, CancellationToken ct = default)
+        public Task RemoverAsync(Torneio t)
         { 
             _ctx.Torneios.Remove(t); return Task.CompletedTask;
         }

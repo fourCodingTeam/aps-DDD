@@ -15,10 +15,10 @@ public class InscricoesController : Controller
         _participantes = participantes;
     }
 
-    public async Task<IActionResult> Create(Guid? torneioId, CancellationToken ct)
+    public async Task<IActionResult> Create(Guid? torneioId)
     {
-        var torList = await _torneios.ListarAsync(ct);
-        var partList = await _participantes.ListarAsync(ct);
+        var torList = await _torneios.ListarAsync();
+        var partList = await _participantes.ListarAsync();
 
         ViewBag.Torneios = new SelectList(torList, "Id", "Nome", torneioId);
         ViewBag.Participantes = new SelectList(partList, "Id", "Nome");
@@ -27,7 +27,7 @@ public class InscricoesController : Controller
     }
 
     [HttpPost, ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create(Guid torneioId, Guid participanteId, CancellationToken ct)
+    public async Task<IActionResult> Create(Guid torneioId, Guid participanteId)
     {
         if (torneioId == Guid.Empty || participanteId == Guid.Empty)
         {
@@ -37,7 +37,7 @@ public class InscricoesController : Controller
 
         try
         {
-            await _torneios.InscreverParticipanteAsync(torneioId, participanteId, ct);
+            await _torneios.InscreverParticipanteAsync(torneioId, participanteId);
             TempData["ok"] = "Participante inscrito com sucesso.";
             return RedirectToAction("Details", "Torneios", new { id = torneioId });
         }

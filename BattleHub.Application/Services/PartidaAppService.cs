@@ -19,14 +19,14 @@ namespace BattleHub.Application.Services
             _participantes = participantes;
         }
 
-        public async Task<IEnumerable<PartidaViewModel>> ListarPorTorneioAsync(Guid torneioId, CancellationToken ct = default)
+        public async Task<IEnumerable<PartidaViewModel>> ListarPorTorneioAsync(Guid torneioId)
         {
             var partidas = await _partidas.Query()
                 .Where(p => p.TorneioId == torneioId)
                 .OrderBy(p => p.Rodada)
-                .ToListAsync(ct);
+                .ToListAsync();
 
-            var participantes = await _participantes.Query().ToListAsync(ct);
+            var participantes = await _participantes.Query().ToListAsync();
 
             return partidas.Select(p => new PartidaViewModel
             {
@@ -42,13 +42,13 @@ namespace BattleHub.Application.Services
             });
         }
 
-        public async Task ReportarVencedorAsync(Guid partidaId, Guid vencedorId, string placar, CancellationToken ct = default)
+        public async Task ReportarVencedorAsync(Guid partidaId, Guid vencedorId, string placar)
         {
-            var partida = await _partidas.ObterPorIdAsync(partidaId, ct)
+            var partida = await _partidas.ObterPorIdAsync(partidaId)
                 ?? throw new Exception("Partida não encontrada.");
 
             partida.ReportarResultado(vencedorId, placar);
-            await _ctx.SaveChangesAsync(ct);
+            await _ctx.SaveChangesAsync();
         }
     }
 }

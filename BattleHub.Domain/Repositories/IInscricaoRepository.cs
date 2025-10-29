@@ -4,9 +4,9 @@ namespace BattleHub.Domain.Repositories
 {
     public interface IInscricaoRepository
     {
-        Task<Inscricao?> ObterPorIdAsync(Guid id, CancellationToken ct = default);
-        Task AdicionarAsync(Inscricao i, CancellationToken ct = default);
-        Task RemoverAsync(Inscricao i, CancellationToken ct = default);
+        Task<Inscricao?> ObterPorIdAsync(Guid id);
+        Task AdicionarAsync(Inscricao i);
+        Task RemoverAsync(Inscricao i);
         IQueryable<Inscricao> Query();
     }
 }

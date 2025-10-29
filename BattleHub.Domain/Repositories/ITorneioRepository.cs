@@ -4,10 +4,10 @@ namespace BattleHub.Domain.Repositories
 {
     public interface ITorneioRepository
     {
-        Task<Torneio?> ObterPorIdAsync(Guid id, CancellationToken ct = default);
-        Task AdicionarAsync(Torneio t, CancellationToken ct = default);
-        Task AtualizarAsync(Torneio t, CancellationToken ct = default);
-        Task RemoverAsync(Torneio t, CancellationToken ct = default);
+        Task<Torneio?> ObterPorIdAsync(Guid id);
+        Task AdicionarAsync(Torneio t);
+        Task AtualizarAsync(Torneio t);
+        Task RemoverAsync(Torneio t);
         IQueryable<Torneio> Query();
     }
 }

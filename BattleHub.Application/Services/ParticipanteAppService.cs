@@ -19,9 +19,9 @@ namespace BattleHub.Application.Services
             _ctx = ctx;
         }
 
-        public async Task<IEnumerable<ParticipanteViewModel>> ListarAsync(CancellationToken ct = default)
+        public async Task<IEnumerable<ParticipanteViewModel>> ListarAsync()
         {
-            var lista = await _participantes.Query().ToListAsync(ct);
+            var lista = await _participantes.Query().ToListAsync();
             return lista.Select(p => new ParticipanteViewModel
             {
                 Id = p.Id,
@@ -30,9 +30,9 @@ namespace BattleHub.Application.Services
             });
         }
 
-        public async Task<ParticipanteViewModel?> ObterPorIdAsync(Guid id, CancellationToken ct = default)
+        public async Task<ParticipanteViewModel?> ObterPorIdAsync(Guid id)
         {
-            var p = await _participantes.ObterPorIdAsync(id, ct);
+            var p = await _participantes.ObterPorIdAsync(id);
             if (p == null) return null;
 
             return new ParticipanteViewModel
@@ -43,35 +43,35 @@ namespace BattleHub.Application.Services
             };
         }
 
-        public async Task CriarAsync(ParticipanteViewModel model, CancellationToken ct = default)
+        public async Task CriarAsync(ParticipanteViewModel model)
         {
             var nome = Nome.Criar(model.Nome);
             var email = Email.Criar(model.Email);
 
             var participante = new Participante(nome, email);
 
-            await _participantes.AdicionarAsync(participante, ct);
-            await _ctx.SaveChangesAsync(ct);
+            await _participantes.AdicionarAsync(participante);
+            await _ctx.SaveChangesAsync();
         }
 
-        public async Task AtualizarAsync(ParticipanteViewModel model, CancellationToken ct = default)
+        public async Task AtualizarAsync(ParticipanteViewModel model)
         {
-            var p = await _participantes.ObterPorIdAsync(model.Id, ct)
+            var p = await _participantes.ObterPorIdAsync(model.Id)
                 ?? throw new Exception("Participante não encontrado.");
 
             p.AtualizarNome(Nome.Criar(model.Nome));
             p.AtualizarEmail(Email.Criar(model.Email));
 
-            await _ctx.SaveChangesAsync(ct);
+            await _ctx.SaveChangesAsync();
         }
 
-        public async Task RemoverAsync(Guid id, CancellationToken ct = default)
+        public async Task RemoverAsync(Guid id)
         {
-            var p = await _participantes.ObterPorIdAsync(id, ct)
+            var p = await _participantes.ObterPorIdAsync(id)
                 ?? throw new Exception("Participante não encontrado.");
 
-            await _participantes.RemoverAsync(p, ct);
-            await _ctx.SaveChangesAsync(ct);
+            await _participantes.RemoverAsync(p);
+            await _ctx.SaveChangesAsync();
         }
     }
 }

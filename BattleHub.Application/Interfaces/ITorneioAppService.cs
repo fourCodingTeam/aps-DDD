@@ -4,12 +4,12 @@ namespace BattleHub.Application.Interfaces
 {
     public interface ITorneioAppService
     {
-        Task<IEnumerable<TorneioViewModel>> ListarAsync(CancellationToken ct = default);
-        Task<TorneioViewModel?> ObterPorIdAsync(Guid id, CancellationToken ct = default);
-        Task CriarAsync(TorneioViewModel model, CancellationToken ct = default);
-        Task AtualizarAsync(TorneioViewModel model, CancellationToken ct = default);
-        Task RemoverAsync(Guid id, CancellationToken ct = default);
-        Task InscreverParticipanteAsync(Guid torneioId, Guid participanteId, CancellationToken ct = default);
-        Task PublicarAsync(Guid torneioId, CancellationToken ct = default);
+        Task<IEnumerable<TorneioViewModel>> ListarAsync();
+        Task<TorneioViewModel?> ObterPorIdAsync(Guid id);
+        Task CriarAsync(TorneioViewModel model);
+        Task AtualizarAsync(TorneioViewModel model);
+        Task RemoverAsync(Guid id);
+        Task InscreverParticipanteAsync(Guid torneioId, Guid participanteId);
+        Task PublicarAsync(Guid torneioId);
     }
 }

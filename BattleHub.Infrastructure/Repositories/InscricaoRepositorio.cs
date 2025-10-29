@@ -10,13 +10,13 @@ namespace BattleHub.Infrastructure.Repositories
         private readonly AppDbContext _ctx;
         public InscricaoRepository(AppDbContext ctx) => _ctx = ctx;
 
-        public async Task<Inscricao?> ObterPorIdAsync(Guid id, CancellationToken ct = default) =>
-            await _ctx.Inscricoes.FirstOrDefaultAsync(x => x.Id == id, ct);
+        public async Task<Inscricao?> ObterPorIdAsync(Guid id) =>
+            await _ctx.Inscricoes.FirstOrDefaultAsync(x => x.Id == id);
 
-        public async Task AdicionarAsync(Inscricao i, CancellationToken ct = default) =>
-            await _ctx.Inscricoes.AddAsync(i, ct);
+        public async Task AdicionarAsync(Inscricao i) =>
+            await _ctx.Inscricoes.AddAsync(i);
 
-        public Task RemoverAsync(Inscricao i, CancellationToken ct = default)
+        public Task RemoverAsync(Inscricao i)
         { _ctx.Inscricoes.Remove(i); return Task.CompletedTask; }
 
         public IQueryable<Inscricao> Query() => _ctx.Inscricoes.AsQueryable();

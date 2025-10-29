@@ -10,16 +10,16 @@ namespace BattleHub.Infrastructure.Repositories
         private readonly AppDbContext _ctx;
         public PartidaRepository(AppDbContext ctx) => _ctx = ctx;
 
-        public async Task<Partida?> ObterPorIdAsync(Guid id, CancellationToken ct = default) =>
-            await _ctx.Partidas.FirstOrDefaultAsync(x => x.Id == id, ct);
+        public async Task<Partida?> ObterPorIdAsync(Guid id) =>
+            await _ctx.Partidas.FirstOrDefaultAsync(x => x.Id == id);
 
-        public async Task AdicionarAsync(Partida p, CancellationToken ct = default) =>
-            await _ctx.Partidas.AddAsync(p, ct);
+        public async Task AdicionarAsync(Partida p) =>
+            await _ctx.Partidas.AddAsync(p);
 
-        public Task AtualizarAsync(Partida p, CancellationToken ct = default)
+        public Task AtualizarAsync(Partida p)
         { _ctx.Partidas.Update(p); return Task.CompletedTask; }
 
-        public Task RemoverAsync(Partida p, CancellationToken ct = default)
+        public Task RemoverAsync(Partida p)
         { _ctx.Partidas.Remove(p); return Task.CompletedTask; }
 
         public IQueryable<Partida> Query() => _ctx.Partidas.AsQueryable();

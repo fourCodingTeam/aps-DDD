@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
@@ -18,6 +16,22 @@ services:
       timeout: 5s
       retries: 10
     restart: unless-stopped
+
+  db-init:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    environment:
+      - SQLSERVER_SA_PASSWORD=${SQLSERVER_SA_PASSWORD}
+      - SQL_HOST=sqlserver
+      - SQL_PORT=1433
+      - SQL_USER=sa
+      - DB_NAME=TorneioHubDb
+    volumes:
+      - ./db/seed.sql:/seed/seed.sql:ro
+      - ./db/init-db.sh:/init-db.sh:ro
+    entrypoint: ["/bin/bash", "/init-db.sh"]
 
 volumes:
   mssql_data:

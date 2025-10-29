@@ -28,9 +28,9 @@ namespace BattleHub.Application.Services
             _chaveador = chaveador;
         }
 
-        public async Task<IEnumerable<TorneioViewModel>> ListarAsync(CancellationToken ct = default)
+        public async Task<IEnumerable<TorneioViewModel>> ListarAsync()
         {
-            var lista = await _torneios.Query().ToListAsync(ct);
+            var lista = await _torneios.Query().ToListAsync();
             return lista.Select(t => new TorneioViewModel
             {
                 Id = t.Id,
@@ -42,9 +42,9 @@ namespace BattleHub.Application.Services
             });
         }
 
-        public async Task<TorneioViewModel?> ObterPorIdAsync(Guid id, CancellationToken ct = default)
+        public async Task<TorneioViewModel?> ObterPorIdAsync(Guid id)
         {
-            var t = await _torneios.ObterPorIdAsync(id, ct);
+            var t = await _torneios.ObterPorIdAsync(id);
             if (t == null) return null;
 
             return new TorneioViewModel
@@ -58,7 +58,7 @@ namespace BattleHub.Application.Services
             };
         }
 
-        public async Task CriarAsync(TorneioViewModel model, CancellationToken ct = default)
+        public async Task CriarAsync(TorneioViewModel model)
         {
             var nome = Nome.Criar(model.Nome);
             var tamanho = TamanhoChave.Criar(model.TamanhoChave);
@@ -66,49 +66,53 @@ namespace BattleHub.Application.Services
 
             var torneio = new Torneio(nome, tamanho, periodo);
 
-            await _torneios.AdicionarAsync(torneio, ct);
-            await _ctx.SaveChangesAsync(ct);
+            await _torneios.AdicionarAsync(torneio);
+            await _ctx.SaveChangesAsync();
         }
 
-        public async Task AtualizarAsync(TorneioViewModel model, CancellationToken ct = default)
+        public async Task AtualizarAsync(TorneioViewModel model)
         {
-            var torneio = await _torneios.ObterPorIdAsync(model.Id, ct)
+            var torneio = await _torneios.ObterPorIdAsync(model.Id)
                 ?? throw new Exception("Torneio não encontrado.");
 
             torneio.Renomear(Nome.Criar(model.Nome));
             torneio.AtualizarPeriodo(PeriodoDatas.Criar(model.DataInicio, model.DataFim));
 
-            await _ctx.SaveChangesAsync(ct);
+            await _ctx.SaveChangesAsync();
         }
 
-        public async Task RemoverAsync(Guid id, CancellationToken ct = default)
+        public async Task RemoverAsync(Guid id)
         {
-            var t = await _torneios.ObterPorIdAsync(id, ct)
+            var t = await _torneios.ObterPorIdAsync(id)
                 ?? throw new Exception("Torneio não encontrado.");
 
-            await _torneios.RemoverAsync(t, ct);
-            await _ctx.SaveChangesAsync(ct);
+            await _torneios.RemoverAsync(t);
+            await _ctx.SaveChangesAsync();
         }
-        public async Task InscreverParticipanteAsync(Guid torneioId, Guid participanteId, CancellationToken ct = default)
+        public async Task InscreverParticipanteAsync(Guid torneioId, Guid participanteId)
         {
-            var t = await _torneios.ObterPorIdAsync(torneioId, ct) ?? throw new Exception("Torneio não encontrado.");
-            var p = await _participantes.ObterPorIdAsync(participanteId, ct) ?? throw new Exception("Participante não encontrado.");
+            var t = await _torneios.ObterPorIdAsync(torneioId) ?? throw new Exception("Torneio não encontrado.");
+            var p = await _participantes.ObterPorIdAsync(participanteId) ?? throw new Exception("Participante não encontrado.");
 
-            t.Inscrever(p);
-            await _ctx.SaveChangesAsync(ct);
+            _ctx.Inscricoes.Add(new Inscricao(t.Id, p.Id));
+            await _ctx.SaveChangesAsync();
         }
 
-        public async Task PublicarAsync(Guid torneioId, CancellationToken ct = default)
+        public async Task PublicarAsync(Guid torneioId)
         {
-            var t = await _torneios.ObterPorIdAsync(torneioId, ct) ?? throw new Exception("Torneio não encontrado.");
+            var t = await _ctx.Torneios.FirstOrDefaultAsync(x => x.Id == torneioId);
+
+            if (t is null) throw new Exception("Torneio não encontrado.");
+
             var participantesIds = t.Inscricoes
                 .Select(i => i.ParticipanteId)
                 .ToList();
 
             var pares = _chaveador.Gerar(participantesIds);
+
             t.PublicarComPares(pares);
 
-            await _ctx.SaveChangesAsync(ct);
+            await _ctx.SaveChangesAsync();
         }
     }
 }
