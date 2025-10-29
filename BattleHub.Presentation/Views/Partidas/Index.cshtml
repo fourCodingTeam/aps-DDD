@@ -1,55 +1,74 @@
-﻿@model IEnumerable<BattleHub.Application.ViewModels.PartidaViewModel>
+@model IEnumerable<BattleHub.Application.ViewModels.PartidaViewModel>
 @{
     ViewData["Title"] = "Partidas";
 }
-<h2>Partidas</h2>
+<h2 class="m-0">Partidas</h2>
 
 @if (TempData["erro"] != null)
 {
-    <div class="alert alert-danger">@TempData["erro"]</div>
+    <div class="bh-alert">@TempData["erro"]</div>
 }
 @if (TempData["ok"] != null)
 {
-    <div class="alert alert-success">@TempData["ok"]</div>
+    <div class="bh-alert bh-alert-success">@TempData["ok"]</div>
 }
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Rodada</th>
-            <th>Participante A</th>
-            <th>Participante B</th>
-            <th>Estado</th>
-            <th>Vencedor</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var p in Model)
-        {
+<div class="bh-card mt-16">
+  <div class="bh-card-body">
+    @if (Model != null && Model.Any())
+    {
+      <div class="bh-table-wrap">
+        <table class="bh-table">
+          <thead>
             <tr>
-                <td>@p.Rodada</td>
-                <td>@p.ParticipanteA</td>
-                <td>@p.ParticipanteB</td>
-                <td>@p.Estado</td>
-                <td>@(p.Vencedor ?? "-")</td>
-                <td>
-                    @if (p.Estado != "Finalizada")
-                    {
-                        <form asp-action="Reportar" method="post">
-                            <input type="hidden" name="id" value="@p.Id" />
-                            <input type="hidden" name="torneioId" value="@ViewBag.TorneioId" />
-                            <select name="vencedorId" class="form-select form-select-sm d-inline w-auto">
-                                <option value="@p.ParticipanteA">@p.ParticipanteA</option>
-                                <option value="@p.ParticipanteB">@p.ParticipanteB</option>
-                            </select>
-                            <button type="submit" class="btn btn-sm btn-primary">Salvar</button>
-                        </form>
-                    }
-                </td>
+              <th>Rodada</th>
+              <th>Participante A</th>
+              <th>Participante B</th>
+              <th>Estado</th>
+              <th>Vencedor</th>
+              <th></th>
             </tr>
-        }
-    </tbody>
-</table>
+          </thead>
+          <tbody>
+          @foreach (var p in Model)
+          {
+            <tr>
+              <td><span class="bh-badge">R@(p.Rodada)</span></td>
+              <td>@p.ParticipanteA</td>
+              <td>@p.ParticipanteB</td>
+              <td>@p.Estado</td>
+              <td>@(p.Vencedor ?? "-")</td>
+              <td class="text-right">
+                @if (p.Estado != "Finalizada")
+                {
+                  <form asp-action="Reportar" method="post" style="display:inline-flex; gap:8px; align-items:center;">
+                    <input type="hidden" name="id" value="@p.Id" />
+                    <input type="hidden" name="torneioId" value="@ViewBag.TorneioId" />
+                    <select name="vencedorId" class="bh-select" style="width:auto; min-width:150px;">
+                      <option value="@p.ParticipanteA">@p.ParticipanteA</option>
+                      <option value="@p.ParticipanteB">@p.ParticipanteB</option>
+                    </select>
+                    <button type="submit" class="bh-btn bh-btn-primary">Reportar</button>
+                  </form>
+                }
+                else
+                {
+                  <span class="text-muted">Concluída</span>
+                }
+              </td>
+            </tr>
+          }
+          </tbody>
+        </table>
+      </div>
+    }
+    else
+    {
+      <div class="text-muted">Nenhuma partida encontrada para este torneio.</div>
+    }
+  </div>
+</div>
 
-<a asp-controller="Torneios" asp-action="Details" asp-route-id="@ViewBag.TorneioId" class="btn btn-outline-secondary">Voltar</a>
+<div class="bh-stack mt-16">
+  <a asp-controller="Torneios" asp-action="Details" asp-route-id="@ViewBag.TorneioId" class="bh-btn bh-btn-secondary">Voltar ao Torneio</a>
+</div>

@@ -1,34 +1,40 @@
-﻿@model IEnumerable<BattleHub.Application.ViewModels.ParticipanteViewModel>
+@model IEnumerable<BattleHub.Application.ViewModels.ParticipanteViewModel>
 @{
     ViewData["Title"] = "Participantes";
 }
 
-<h2>Participantes</h2>
+<h2 class="m-0">Participantes</h2>
 
-<p>
-    <a class="btn btn-primary" asp-action="Create">Novo Participante</a>
-</p>
+<div class="bh-stack mt-16">
+    <a class="bh-btn bh-btn-red" asp-action="Create">Novo Participante</a>
+</div>
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Nome</th>
-            <th>Email</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var p in Model)
-        {
-            <tr>
-                <td>@p.Nome</td>
-                <td>@p.Email</td>
-                <td class="text-end">
-                    <a class="btn btn-sm btn-secondary" asp-action="Details" asp-route-id="@p.Id">Detalhes</a>
-                    <a class="btn btn-sm btn-warning" asp-action="Edit" asp-route-id="@p.Id">Editar</a>
-                    <a class="btn btn-sm btn-danger" asp-action="Delete" asp-route-id="@p.Id">Remover</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+<div class="bh-card mt-16">
+    <div class="bh-card-body">
+        <div class="bh-table-wrap">
+            <table class="bh-table">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Email</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var p in Model)
+                    {
+                        <tr>
+                            <td>@p.Nome</td>
+                            <td>@p.Email</td>
+                        <td class="text-right">
+                            <a class="bh-btn bh-btn-secondary" asp-action="Details" asp-route-id="@p.Id">Detalhes</a>
+                            <a class="bh-btn bh-btn-primary" asp-action="Edit" asp-route-id="@p.Id">Editar</a>
+                            <a class="bh-btn bh-btn-neutral" asp-action="Delete" asp-route-id="@p.Id">Remover</a>
+                        </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

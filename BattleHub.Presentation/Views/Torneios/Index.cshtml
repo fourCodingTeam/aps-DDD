@@ -1,35 +1,43 @@
-﻿@model IEnumerable<BattleHub.Application.ViewModels.TorneioViewModel>
+@model IEnumerable<BattleHub.Application.ViewModels.TorneioViewModel>
 @{
     ViewData["Title"] = "Torneios";
 }
-<h2>Torneios</h2>
-<p><a class="btn btn-primary" asp-action="Create">Novo Torneio</a></p>
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Nome</th>
-            <th>Tamanho</th>
-            <th>Início</th>
-            <th>Fim</th>
-            <th>Estado</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var t in Model)
-        {
-            <tr>
-                <td>@t.Nome</td>
-                <td>@t.TamanhoChave</td>
-                <td>@t.DataInicio.ToString("dd/MM/yyyy")</td>
-                <td>@t.DataFim.ToString("dd/MM/yyyy")</td>
-                <td>@t.Estado</td>
-                <td class="text-end">
-                    <a class="btn btn-sm btn-secondary" asp-action="Details" asp-route-id="@t.Id">Detalhes</a>
-                    <a class="btn btn-sm btn-warning" asp-action="Edit" asp-route-id="@t.Id">Editar</a>
-                    <a class="btn btn-sm btn-danger" asp-action="Delete" asp-route-id="@t.Id">Remover</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+<h2 class="m-0">Torneios</h2>
+<div class="bh-stack mt-16">
+    <a class="bh-btn bh-btn-red" asp-action="Create">Novo Torneio</a>
+</div>
+<div class="bh-card mt-16">
+    <div class="bh-card-body">
+        <div class="bh-table-wrap">
+            <table class="bh-table">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Tamanho</th>
+                        <th>Início</th>
+                        <th>Fim</th>
+                        <th>Estado</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach (var t in Model)
+                {
+                    <tr>
+                        <td>@t.Nome</td>
+                        <td>@t.TamanhoChave</td>
+                        <td>@t.DataInicio.ToString("dd/MM/yyyy")</td>
+                        <td>@t.DataFim.ToString("dd/MM/yyyy")</td>
+                        <td>@t.Estado</td>
+                        <td class="text-right">
+                            <a class="bh-btn bh-btn-secondary" asp-action="Details" asp-route-id="@t.Id">Detalhes</a>
+                            <a class="bh-btn bh-btn-primary" asp-action="Edit" asp-route-id="@t.Id">Editar</a>
+                            <a class="bh-btn bh-btn-neutral" asp-action="Delete" asp-route-id="@t.Id">Remover</a>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

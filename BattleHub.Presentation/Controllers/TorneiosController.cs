@@ -1,14 +1,22 @@
-﻿using BattleHub.Application.Interfaces;
+using BattleHub.Application.Interfaces;
 using BattleHub.Application.ViewModels;
+using BattleHub.Infraestrutura.Persistence;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace BattleHub.Presentation.Controllers;
 
 public class TorneiosController : Controller
 {
     private readonly ITorneioAppService _svc;
+    private readonly AppDbContext _ctx;
 
-    public TorneiosController(ITorneioAppService svc) => _svc = svc;
+    public TorneiosController(ITorneioAppService svc, AppDbContext ctx)
+    {
+        _svc = svc;
+        _ctx = ctx;
+    }
 
     public async Task<IActionResult> Index()
     {
@@ -20,6 +28,23 @@ public class TorneiosController : Controller
     {
         var item = await _svc.ObterPorIdAsync(id);
         if (item is null) return NotFound();
+
+        var participantes = await _ctx.Inscricoes
+            .Where(i => i.TorneioId == id)
+            .Join(
+                _ctx.Participantes,
+                i => i.ParticipanteId,
+                p => p.Id,
+                (i, p) => new ParticipanteViewModel
+                {
+                    Id = p.Id,
+                    Nome = p.Nome.Valor,
+                    Email = p.Email.Valor
+                })
+            .OrderBy(p => p.Nome)
+            .ToListAsync();
+
+        ViewBag.Participantes = participantes;
         return View(item);
     }
 

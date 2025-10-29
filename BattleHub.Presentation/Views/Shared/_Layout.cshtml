@@ -1,4 +1,4 @@
-﻿@{
+@{
     Layout = null;
     var title = ViewData["Title"] as string ?? "BattleHub";
 }
@@ -8,28 +8,39 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>@title - BattleHub</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
 </head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light px-3">
-            <a class="navbar-brand" asp-controller="Torneios" asp-action="Index">BattleHub</a>
-            <div class="navbar-nav">
-                <a class="nav-link" asp-controller="Torneios" asp-action="Index">Torneios</a>
-                <a class="nav-link" asp-controller="Participantes" asp-action="Index">Participantes</a>
+<body class="bh-body">
+    <div class="bh-topbar">
+        <button id="bh-burger" class="bh-burger" aria-label="Abrir menu"><span></span></button>
+        <a asp-controller="Torneios" asp-action="Index" class="bh-brand-link">BattleHub</a>
+        <div style="width:40px"></div>
+    </div>
+    <div class="bh-app">
+        <aside class="bh-sidebar">
+            <div class="bh-brand">
+                <a asp-controller="Torneios" asp-action="Index" class="bh-brand-link">BattleHub</a>
             </div>
-        </nav>
-        @if (TempData["ok"] is string msg)
-        {
-            <div class="alert alert-success text-center m-0 rounded-0">@msg</div>
-        }
-    </header>
+            <nav class="bh-nav">
+                <a class="bh-nav-link" asp-controller="Torneios" asp-action="Index">Torneios</a>
+                <a class="bh-nav-link" asp-controller="Participantes" asp-action="Index">Participantes</a>
+            </nav>
+            <div class="bh-sidebar-footer">© @DateTime.Now.Year</div>
+        </aside>
 
-    <main class="container mt-4">
-        @RenderBody()
-    </main>
+        <div class="bh-main">
+            @if (TempData["ok"] is string msg)
+            {
+                <div class="bh-alert bh-alert-success">@msg</div>
+            }
 
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+            <main class="bh-container">
+                @RenderBody()
+            </main>
+        </div>
+    </div>
+
+    <script src="~/js/site.js"></script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>

@@ -1,24 +1,26 @@
-﻿@{
+@{
     ViewData["Title"] = "Inscrever Participante";
 }
-<h2>Inscrever Participante</h2>
+<h2 class="m-0">Inscrever Participante</h2>
 
 @if (TempData["erro"] is string erro)
 {
-    <div class="alert alert-danger">@erro</div>
+    <div class="bh-alert">@erro</div>
 }
 
-<form asp-action="Create" method="post">
-    <div class="mb-3">
-        <label class="form-label">Torneio</label>
-        <select name="torneioId" class="form-select" asp-items="ViewBag.Torneios"></select>
+<form asp-action="Create" method="post" class="mt-16" novalidate>
+    <div class="bh-field">
+        <label class="bh-label">Torneio</label>
+        <select name="torneioId" class="bh-select" asp-items="ViewBag.Torneios"></select>
     </div>
 
-    <div class="mb-3">
-        <label class="form-label">Participante</label>
-        <select name="participanteId" class="form-select" asp-items="ViewBag.Participantes"></select>
+    <div class="bh-field">
+        <label class="bh-label">Participante</label>
+        <select name="participanteId" class="bh-select" asp-items="ViewBag.Participantes"></select>
     </div>
 
-    <button type="submit" class="btn btn-primary">Inscrever</button>
-    <a asp-controller="Torneios" asp-action="Index" class="btn btn-outline-secondary">Voltar</a>
+    <div class="bh-stack mt-16">
+        <button type="submit" class="bh-btn bh-btn-primary">Inscrever</button>
+        <a asp-controller="Torneios" asp-action="Index" class="bh-btn bh-btn-secondary">Voltar</a>
+    </div>
 </form>

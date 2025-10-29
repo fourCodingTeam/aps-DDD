@@ -1,14 +1,16 @@
-﻿@model BattleHub.Application.ViewModels.ParticipanteViewModel
+@model BattleHub.Application.ViewModels.ParticipanteViewModel
 @{
     ViewData["Title"] = "Remover Participante";
 }
 
-<h2>Remover Participante</h2>
+<h2 class="m-0">Remover Participante</h2>
 
-<p>Tem certeza que deseja remover o participante <strong>@Model.Nome</strong>?</p>
+<p class="mt-16">Tem certeza que deseja remover o participante <strong>@Model.Nome</strong>?</p>
 
-<form asp-action="Delete" method="post">
+<form asp-action="Delete" method="post" class="mt-16">
     <input type="hidden" asp-for="Id" />
-    <button type="submit" class="btn btn-danger">Remover</button>
-    <a asp-action="Index" class="btn btn-outline-secondary">Cancelar</a>
+    <div class="bh-stack">
+        <button type="submit" class="bh-btn bh-btn-neutral">Remover</button>
+        <a asp-action="Index" class="bh-btn bh-btn-secondary">Cancelar</a>
+    </div>
 </form>
