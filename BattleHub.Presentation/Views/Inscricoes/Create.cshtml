@@ -1,0 +1,24 @@
+﻿@{
+    ViewData["Title"] = "Inscrever Participante";
+}
+<h2>Inscrever Participante</h2>
+
+@if (TempData["erro"] is string erro)
+{
+    <div class="alert alert-danger">@erro</div>
+}
+
+<form asp-action="Create" method="post">
+    <div class="mb-3">
+        <label class="form-label">Torneio</label>
+        <select name="torneioId" class="form-select" asp-items="ViewBag.Torneios"></select>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Participante</label>
+        <select name="participanteId" class="form-select" asp-items="ViewBag.Participantes"></select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Inscrever</button>
+    <a asp-controller="Torneios" asp-action="Index" class="btn btn-outline-secondary">Voltar</a>
+</form>

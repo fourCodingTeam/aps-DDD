@@ -9,5 +9,7 @@ namespace BattleHub.Application.Interfaces
         Task CriarAsync(TorneioViewModel model, CancellationToken ct = default);
         Task AtualizarAsync(TorneioViewModel model, CancellationToken ct = default);
         Task RemoverAsync(Guid id, CancellationToken ct = default);
+        Task InscreverParticipanteAsync(Guid torneioId, Guid participanteId, CancellationToken ct = default);
+        Task PublicarAsync(Guid torneioId, CancellationToken ct = default);
     }
 }

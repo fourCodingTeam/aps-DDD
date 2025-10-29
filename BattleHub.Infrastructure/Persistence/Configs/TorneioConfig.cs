@@ -15,6 +15,7 @@ namespace BattleHub.Infrastructure.Persistence.Configs
             b.OwnsOne(x => x.Nome, vo =>
             {
                 vo.Property(p => p.Valor).HasColumnName("Nome").HasMaxLength(120).IsRequired();
+                vo.HasIndex(p => p.Valor);
             });
 
             // TamanhoChave (VO -> int)
@@ -33,7 +34,6 @@ namespace BattleHub.Infrastructure.Persistence.Configs
             // Enum como int
             b.Property(x => x.Estado).HasConversion<int>().IsRequired();
 
-            // Relacionamentos (1->N) - agregado controla consistência
             b.HasMany(x => x.Inscricoes)
                 .WithOne()
                 .HasForeignKey(i => i.TorneioId)
@@ -43,9 +43,6 @@ namespace BattleHub.Infrastructure.Persistence.Configs
                 .WithOne()
                 .HasForeignKey(p => p.TorneioId)
                 .OnDelete(DeleteBehavior.Cascade);
-
-            // Índice útil para busca
-            b.HasIndex("Nome");
         }
     }
 }

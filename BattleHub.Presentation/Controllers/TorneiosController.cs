@@ -66,4 +66,19 @@ public class TorneiosController : Controller
         TempData["ok"] = "Torneio removido.";
         return RedirectToAction(nameof(Index));
     }
+
+    [HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> Publicar(Guid id, CancellationToken ct)
+    {
+        try
+        {
+            await _svc.PublicarAsync(id, ct);
+            TempData["ok"] = "Torneio publicado e partidas geradas.";
+        }
+        catch (Exception ex)
+        {
+            TempData["erro"] = ex.Message;
+        }
+        return RedirectToAction("Details", new { id });
+    }
 }

@@ -19,9 +19,8 @@ namespace BattleHub.Infrastructure.Persistence.Configs
             b.OwnsOne(x => x.Email, vo =>
             {
                 vo.Property(p => p.Valor).HasColumnName("Email").HasMaxLength(180).IsRequired();
+                vo.HasIndex(p => p.Valor).IsUnique();
             });
-
-            b.HasIndex("Email").IsUnique();
         }
     }
 }

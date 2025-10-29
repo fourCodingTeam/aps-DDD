@@ -1,4 +1,3 @@
-using BattleHub.Domain.ObjetosDeValor;
 using BattleHub.Domain.ValueObjects;
 
 namespace BattleHub.Domain.Entities
@@ -20,5 +19,4 @@ namespace BattleHub.Domain.Entities
         public void AtualizarNome(Nome novoNome) => Nome = novoNome ?? throw new ArgumentNullException(nameof(novoNome));
         public void AtualizarEmail(Email novoEmail) => Email = novoEmail ?? throw new ArgumentNullException(nameof(novoEmail));
     }
-}
 }

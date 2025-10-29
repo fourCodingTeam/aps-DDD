@@ -1,6 +1,7 @@
 using BattleHub.Application.Interfaces;
 using BattleHub.Application.ViewModels;
 using BattleHub.Domain.Entities;
+using BattleHub.Domain.Interfaces;
 using BattleHub.Domain.Repositories;
 using BattleHub.Domain.ValueObjects;
 using BattleHub.Infraestrutura.Persistence;
@@ -12,16 +13,24 @@ namespace BattleHub.Application.Services
     {
         private readonly ITorneioRepository _torneios;
         private readonly AppDbContext _ctx;
+        private readonly IParticipanteRepository _participantes;
+        private readonly IChaveamento _chaveador;
 
-        public TorneioAppService(ITorneioRepository torneios, AppDbContext ctx)
+        public TorneioAppService(
+            ITorneioRepository torneios, 
+            AppDbContext ctx,
+            IParticipanteRepository participantes,
+            IChaveamento chaveador)
         {
             _torneios = torneios;
             _ctx = ctx;
+            _participantes = participantes;
+            _chaveador = chaveador;
         }
 
         public async Task<IEnumerable<TorneioViewModel>> ListarAsync(CancellationToken ct = default)
         {
-            var lista = await _torneios.Query().AsNoTracking().ToListAsync(ct);
+            var lista = await _torneios.Query().ToListAsync(ct);
             return lista.Select(t => new TorneioViewModel
             {
                 Id = t.Id,
@@ -78,6 +87,27 @@ namespace BattleHub.Application.Services
                 ?? throw new Exception("Torneio não encontrado.");
 
             await _torneios.RemoverAsync(t, ct);
+            await _ctx.SaveChangesAsync(ct);
+        }
+        public async Task InscreverParticipanteAsync(Guid torneioId, Guid participanteId, CancellationToken ct = default)
+        {
+            var t = await _torneios.ObterPorIdAsync(torneioId, ct) ?? throw new Exception("Torneio não encontrado.");
+            var p = await _participantes.ObterPorIdAsync(participanteId, ct) ?? throw new Exception("Participante não encontrado.");
+
+            t.Inscrever(p);
+            await _ctx.SaveChangesAsync(ct);
+        }
+
+        public async Task PublicarAsync(Guid torneioId, CancellationToken ct = default)
+        {
+            var t = await _torneios.ObterPorIdAsync(torneioId, ct) ?? throw new Exception("Torneio não encontrado.");
+            var participantesIds = t.Inscricoes
+                .Select(i => i.ParticipanteId)
+                .ToList();
+
+            var pares = _chaveador.Gerar(participantesIds);
+            t.PublicarComPares(pares);
+
             await _ctx.SaveChangesAsync(ct);
         }
     }

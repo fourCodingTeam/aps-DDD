@@ -21,7 +21,7 @@ namespace BattleHub.Application.Services
 
         public async Task<IEnumerable<ParticipanteViewModel>> ListarAsync(CancellationToken ct = default)
         {
-            var lista = await _participantes.Query().AsNoTracking().ToListAsync(ct);
+            var lista = await _participantes.Query().ToListAsync(ct);
             return lista.Select(p => new ParticipanteViewModel
             {
                 Id = p.Id,

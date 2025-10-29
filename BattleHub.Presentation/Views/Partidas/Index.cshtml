@@ -1,0 +1,55 @@
+﻿@model IEnumerable<BattleHub.Application.ViewModels.PartidaViewModel>
+@{
+    ViewData["Title"] = "Partidas";
+}
+<h2>Partidas</h2>
+
+@if (TempData["erro"] != null)
+{
+    <div class="alert alert-danger">@TempData["erro"]</div>
+}
+@if (TempData["ok"] != null)
+{
+    <div class="alert alert-success">@TempData["ok"]</div>
+}
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Rodada</th>
+            <th>Participante A</th>
+            <th>Participante B</th>
+            <th>Estado</th>
+            <th>Vencedor</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var p in Model)
+        {
+            <tr>
+                <td>@p.Rodada</td>
+                <td>@p.ParticipanteA</td>
+                <td>@p.ParticipanteB</td>
+                <td>@p.Estado</td>
+                <td>@(p.Vencedor ?? "-")</td>
+                <td>
+                    @if (p.Estado != "Finalizada")
+                    {
+                        <form asp-action="Reportar" method="post">
+                            <input type="hidden" name="id" value="@p.Id" />
+                            <input type="hidden" name="torneioId" value="@ViewBag.TorneioId" />
+                            <select name="vencedorId" class="form-select form-select-sm d-inline w-auto">
+                                <option value="@p.ParticipanteA">@p.ParticipanteA</option>
+                                <option value="@p.ParticipanteB">@p.ParticipanteB</option>
+                            </select>
+                            <button type="submit" class="btn btn-sm btn-primary">Salvar</button>
+                        </form>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-controller="Torneios" asp-action="Details" asp-route-id="@ViewBag.TorneioId" class="btn btn-outline-secondary">Voltar</a>

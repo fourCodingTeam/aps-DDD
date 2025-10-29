@@ -1,5 +1,5 @@
 using BattleHub.Domain.Enums;
-using BattleHub.Domain.ObjetosDeValor;
+using BattleHub.Domain.Interfaces;
 using BattleHub.Domain.ValueObjects;
 
 namespace BattleHub.Domain.Entities
@@ -42,7 +42,7 @@ namespace BattleHub.Domain.Entities
             _inscricoes.Add(new Inscricao(Id, participante.Id));
         }
 
-        public void Publicar()
+        public void Publicar(IChaveamento chaveamento)
         {
             if (Estado != EstadoTorneio.Rascunho)
                 throw new InvalidOperationException("Somente torneio em rascunho pode ser publicado.");
@@ -50,17 +50,41 @@ namespace BattleHub.Domain.Entities
             if (_inscricoes.Count != TamanhoChave.Valor)
                 throw new InvalidOperationException("Para publicar, o número de inscrições deve preencher a chave.");
 
+            try
+            {
+                var pares = chaveamento.Gerar(_inscricoes.Select(i => i.ParticipanteId).ToList());
+                int rodada = 1;
+
+                foreach (var (a, b) in pares)
+                    _partidas.Add(Partida.Criar(Id, rodada, a, b));
+            } 
+            catch (Exception ex) 
+            {
+                throw new InvalidOperationException($"Erro ao criar o torneio. Error: {ex}");
+            }
+
             Estado = EstadoTorneio.Publicado;
-            GerarChaveamento();
         }
 
-        private void GerarChaveamento()
+        public void PublicarComPares(IReadOnlyList<(Guid A, Guid B)> pares)
         {
-            // MVP: parear inscrições na ordem de criação
-            var ids = _inscricoes.Select(i => i.ParticipanteId).ToList();
+            if (Estado != EstadoTorneio.Rascunho)
+                throw new InvalidOperationException("Apenas torneios em rascunho podem ser publicados.");
+
+            if (_inscricoes.Count != TamanhoChave.Valor)
+                throw new InvalidOperationException("Número de inscrições não corresponde ao tamanho da chave.");
+
+            if (pares.Count != _inscricoes.Count / 2)
+                throw new InvalidOperationException("Número inválido de pares para gerar partidas.");
+
+            Estado = EstadoTorneio.Publicado;
+
             int rodada = 1;
-            for (int i = 0; i < ids.Count; i += 2)
-                _partidas.Add(Partida.Criar(Id, rodada, ids[i], ids[i + 1]));
+            foreach (var (a, b) in pares)
+            {
+                var partida = Partida.Criar(Id, rodada, a, b);
+                _partidas.Add(partida);
+            }
         }
 
         public void Iniciar()

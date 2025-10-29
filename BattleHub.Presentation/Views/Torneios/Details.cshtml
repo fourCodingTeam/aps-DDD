@@ -13,7 +13,26 @@
 	<dt class="col-sm-2">Estado</dt>
 	<dd class="col-sm-10">@Model.Estado</dd>
 </dl>
+<p class="mt-3 d-flex gap-2">
+	<a class="btn btn-success"
+	   asp-controller="Inscricoes"
+	   asp-action="Create"
+	   asp-route-torneioId="@Model.Id">
+		Inscrever Participante
+	</a>
+
+	<form asp-action="Publicar" method="post" class="d-inline">
+		<input type="hidden" name="id" value="@Model.Id" />
+		<button type="submit" class="btn btn-primary">Publicar Torneio</button>
+	</form>
+</p>
+
+@if (TempData["erro"] is string erro)
+{
+	<div class="alert alert-danger mt-2">@erro</div>
 <p>
 	<a class="btn btn-warning" asp-action="Edit" asp-route-id="@Model.Id">Editar</a>
 	<a class="btn btn-outline-secondary" asp-action="Index">Voltar</a>
 </p>
+
+}
